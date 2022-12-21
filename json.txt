@@ -1,6 +1,9 @@
 package com.abhi.uniqueidentification;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -11,46 +14,26 @@ class User {
 	public static void main(String[] args) throws IOException {
 		ObjectMapper objectMapper = new ObjectMapper();
 
-		String json = "{\n"
-				+ "	\"metadata\": {\n"
-				+ "		\"id\": \"1c13a0cb-116e-4768-86e6-54727548ca40\",\n"
-				+ "		\"routingKey\": \"com.wabtec.pds.devicemanagement.dto.DeviceStateUpdateGram\",\n"
-				+ "		\"source\": \"device-management\",\n"
-				+ "		\"sourceTimestamp\": \"2022-12-15T14:22:44.403Z\",\n"
-				+ "		\"processTimestamp\": \"2022-12-15T14:22:44.403Z\",\n"
-				+ "		\"version\": \"v1.0.0\"\n"
-				+ "	},\n"
-				+ "	\"routingMessage\": {\n"
-				+ "		\"timestamp\": \"2022-12-15T14:22:44.403350Z\",\n"
-				+ "		\"deviceInfos\": [{\n"
-				+ "			\"deviceId\": 32236585,\n"
-				+ "			\"deviceType\": \"PHYSICAL_CONTROLPOINT_DEV\",\n"
-				+ "			\"territoryIds\": [39468160],\n"
-				+ "			\"fieldIndications\": [\"CP_FIELD_LOCAL_CONTROL_OFF_IND\"],\n"
-				+ "			\"officeControls\": [\"INITIALIZED\"],\n"
-				+ "			\"displayCounter\": 16\n"
-				+ "		}],\n"
-				+ "		\"codeStationInfos\": [{\n"
-				+ "			\"codeStationId\": 32236590,\n"
-				+ "			\"territoryIds\": [39468160],\n"
-				+ "			\"activeStates\": [\"INITIALIZED\", \"CS_TRANSMITTING_CONTROLS\", \"CS_RECEIVING_INDICATIONS\"]\n"
-				+ "		}]\n"
-				+ "	}\n"
-				+ "}";
+		
+		String json = "{\"metadata\":{\"id\":\"1c13a0cb-116e-4768-86e6-54727548ca40\",\"routingKey\":\"com.wabtec.pds.devicemanagement.dto.DeviceStateUpdateGram\",\"source\":\"device-management\",\"sourceTimestamp\":\"2022-12-15T14:22:44.403Z\",\"processTimestamp\":\"2022-12-15T14:22:44.403Z\",\"version\":\"v1.0.0\"},\"routingMessage\":\"{\\\"timestamp\\\":\\\"2022-12-15T14:22:44.403350Z\\\",\\\"deviceInfos\\\":[{\\\"deviceId\\\":32236585,\\\"deviceType\\\":\\\"PHYSICAL_CONTROLPOINT_DEV\\\",\\\"territoryIds\\\":[39468160],\\\"fieldIndications\\\":[\\\"CP_FIELD_LOCAL_CONTROL_OFF_IND\\\",\\\"CP_FIELD_LOCAL_CONTROL_OFF_IND\\\"],\\\"officeControls\\\":[\\\"INITIALIZED\\\"],\\\"displayCounter\\\":16}],\\\"codeStationInfos\\\":[{\\\"codeStationId\\\":32236590,\\\"territoryIds\\\":[39468160],\\\"activeStates\\\":[\\\"INITIALIZED\\\",\\\"CS_TRANSMITTING_CONTROLS\\\",\\\"CS_RECEIVING_INDICATIONS\\\"]}]}\"}";
 		json.trim();
+	
 		JsonNode jsonNode = objectMapper.readTree(json);
 		System.out.println(jsonNode);
+		
 		JsonNode jsonNode2 = jsonNode.get("routingMessage");
 
-		System.out.println(jsonNode2);
+		JsonNode jsonNode3 = objectMapper.readTree(jsonNode2.asText());
+		
+        System.out.println(jsonNode3);
+		ArrayNode datasetArray = (ArrayNode) jsonNode3.get("deviceInfos");
 
-		ArrayNode datasetArray = (ArrayNode) jsonNode2.get("deviceInfos");
 		System.out.println(datasetArray == null);
+		Map<String,List<String>> s=new HashMap<>();
 		for (JsonNode jsonNode1 : datasetArray) {
+		
 			System.out.println(jsonNode1.get("deviceId"));
-
 			System.out.println(jsonNode1.get("deviceType"));
-
 			System.out.println(jsonNode1.get("territoryIds"));
 			System.out.println(jsonNode1.get("fieldIndications"));
 
