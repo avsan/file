@@ -1,0 +1,60 @@
+package com.abhi.uniqueidentification;
+
+import java.io.IOException;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+
+class User {
+
+	public static void main(String[] args) throws IOException {
+		ObjectMapper objectMapper = new ObjectMapper();
+
+		String json = "{\n"
+				+ "	\"metadata\": {\n"
+				+ "		\"id\": \"1c13a0cb-116e-4768-86e6-54727548ca40\",\n"
+				+ "		\"routingKey\": \"com.wabtec.pds.devicemanagement.dto.DeviceStateUpdateGram\",\n"
+				+ "		\"source\": \"device-management\",\n"
+				+ "		\"sourceTimestamp\": \"2022-12-15T14:22:44.403Z\",\n"
+				+ "		\"processTimestamp\": \"2022-12-15T14:22:44.403Z\",\n"
+				+ "		\"version\": \"v1.0.0\"\n"
+				+ "	},\n"
+				+ "	\"routingMessage\": {\n"
+				+ "		\"timestamp\": \"2022-12-15T14:22:44.403350Z\",\n"
+				+ "		\"deviceInfos\": [{\n"
+				+ "			\"deviceId\": 32236585,\n"
+				+ "			\"deviceType\": \"PHYSICAL_CONTROLPOINT_DEV\",\n"
+				+ "			\"territoryIds\": [39468160],\n"
+				+ "			\"fieldIndications\": [\"CP_FIELD_LOCAL_CONTROL_OFF_IND\"],\n"
+				+ "			\"officeControls\": [\"INITIALIZED\"],\n"
+				+ "			\"displayCounter\": 16\n"
+				+ "		}],\n"
+				+ "		\"codeStationInfos\": [{\n"
+				+ "			\"codeStationId\": 32236590,\n"
+				+ "			\"territoryIds\": [39468160],\n"
+				+ "			\"activeStates\": [\"INITIALIZED\", \"CS_TRANSMITTING_CONTROLS\", \"CS_RECEIVING_INDICATIONS\"]\n"
+				+ "		}]\n"
+				+ "	}\n"
+				+ "}";
+		json.trim();
+		JsonNode jsonNode = objectMapper.readTree(json);
+		System.out.println(jsonNode);
+		JsonNode jsonNode2 = jsonNode.get("routingMessage");
+
+		System.out.println(jsonNode2);
+
+		ArrayNode datasetArray = (ArrayNode) jsonNode2.get("deviceInfos");
+		System.out.println(datasetArray == null);
+		for (JsonNode jsonNode1 : datasetArray) {
+			System.out.println(jsonNode1.get("deviceId"));
+
+			System.out.println(jsonNode1.get("deviceType"));
+
+			System.out.println(jsonNode1.get("territoryIds"));
+			System.out.println(jsonNode1.get("fieldIndications"));
+
+		}
+
+	}
+}
